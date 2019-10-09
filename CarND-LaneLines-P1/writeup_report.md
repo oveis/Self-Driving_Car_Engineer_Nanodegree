@@ -53,11 +53,12 @@ Step 6. Apply Hough transform.
  - For example, if the original image has white broken lines, the `draw_lines()` function draws a line per each broken lines. See below image.
 ![alt text][image6]
 
- - For Self-driving car, we want to draw a single solid line on the left and right lanes. In order to do it, I modified the `draw_lines()` function with simple math.
+ - For self-driving car, we want to draw a single solid line on the left and right lanes. In order to do it, I modified the `draw_lines()` function with simple math.
  - The Linear equation is `y = slope * x + y_intersept`. 
  - Since the Hough transform returns a pair of two points, (x1, y1) and (x2, y2), I could calculate `slope` and `y_intersept`. 
     If `slope` is positive, it's for left lane, otherwise right lane. 
- - After calculating the average of `slope` and `y_intersept` for the left and right lanes, I draw a single solid lines on the left and right lanes. 
+ - If a single frame quality was suddenly bad because of strong light or shadow, it's possible that there is no edge or too much edges. In this case, the calculated `slope` and `y_intersept` could be wrong. To handle this issue, I used previous 10 frames data. By comparing with current `slope` and average `slope` of previous frames, I could recognize if the current `slope` value was changed suddenly. If it was, it's replaced with the previous `slope`.
+ - Then I draw a single solid lines on the left and right lanes with the `slope` and `y_intersept`.
 ![alt text][image7]
 
 Step 7. Synthesize lines on the original image.

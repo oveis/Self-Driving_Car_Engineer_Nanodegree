@@ -13187,7 +13187,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#importing some useful packages</span>
@@ -13212,7 +13212,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#reading in an image</span>
@@ -13244,13 +13244,13 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[27]:</div>
+    <div class="prompt output_prompt">Out[2]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.image.AxesImage at 0x7f49a00c8ac8&gt;</pre>
+<pre>&lt;matplotlib.image.AxesImage at 0x7fc3965cb128&gt;</pre>
 </div>
 
 </div>
@@ -13314,10 +13314,22 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[67]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">prev_left_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">prev_right_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">MAX_PREV_LENGTH</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">SLOPE_THRESHOLD</span> <span class="o">=</span> <span class="o">.</span><span class="mi">04</span>
+
+
+<span class="k">def</span> <span class="nf">init_params</span><span class="p">():</span>
+    <span class="n">prev_left_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">prev_right_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
+    
 
 <span class="k">def</span> <span class="nf">grayscale</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Applies the Grayscale transform</span>
@@ -13389,8 +13401,8 @@ div#notebook {
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Improved version. Draw full extent lines</span>
         <span class="n">img_height</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">left_slopes</span><span class="p">,</span> <span class="n">left_y_intercepts</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-        <span class="n">right_slopes</span><span class="p">,</span> <span class="n">right_y_intercepts</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">left_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">right_slope_intercepts</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
@@ -13400,24 +13412,45 @@ div#notebook {
 
                 <span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span> <span class="o">=</span> <span class="n">_get_slope_and_y_intercept</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">slope</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">left_slopes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span>
-                    <span class="n">left_y_intercepts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_intercept</span><span class="p">)</span>
+                    <span class="n">left_slope_intercepts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">right_slopes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span>
-                    <span class="n">right_y_intercepts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_intercept</span><span class="p">)</span>
+                    <span class="n">right_slope_intercepts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">))</span>
 
-        <span class="k">for</span> <span class="n">slopes</span><span class="p">,</span> <span class="n">y_intercepts</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">left_slopes</span><span class="p">,</span> <span class="n">left_y_intercepts</span><span class="p">),</span>
-                                     <span class="p">(</span><span class="n">right_slopes</span><span class="p">,</span> <span class="n">right_y_intercepts</span><span class="p">)]:</span>
+        <span class="k">for</span> <span class="n">slope_intercepts</span><span class="p">,</span> <span class="n">prev_slope_intercepts</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">left_slope_intercepts</span><span class="p">,</span> <span class="n">prev_left_slope_intercepts</span><span class="p">),</span>
+                                                        <span class="p">(</span><span class="n">right_slope_intercepts</span><span class="p">,</span> <span class="n">prev_right_slope_intercepts</span><span class="p">)]:</span>
 
             <span class="c1"># slopes and y_intercepts has same length. </span>
             <span class="c1"># Ignore if slopes is empty.</span>
-            <span class="k">if</span> <span class="n">slopes</span><span class="p">:</span>
-                <span class="n">slope</span> <span class="o">=</span> <span class="n">_cal_average</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span>
-                <span class="n">y_intercept</span> <span class="o">=</span> <span class="n">_cal_average</span><span class="p">(</span><span class="n">y_intercepts</span><span class="p">)</span>
-                <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">_get_positions</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">,</span> 
-                                            <span class="n">img_height</span><span class="p">,</span> <span class="n">img_interest_height_rate</span><span class="p">)</span>
-                <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>
-        
+            <span class="k">if</span> <span class="n">slope_intercepts</span><span class="p">:</span>
+                <span class="n">slope</span> <span class="o">=</span> <span class="n">_cal_average</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">slope_intercepts</span><span class="p">])</span>
+                <span class="n">y_intercept</span> <span class="o">=</span> <span class="n">_cal_average</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">slope_intercepts</span><span class="p">])</span>
+                
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prev_slope_intercepts</span><span class="p">)</span> <span class="o">==</span> <span class="n">MAX_PREV_LENGTH</span><span class="p">:</span>
+                    <span class="n">prev_avg_slope</span> <span class="o">=</span> <span class="n">_cal_average</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">prev_slope_intercepts</span><span class="p">])</span>
+                    
+                    <span class="c1"># If current slope is too far from average of previous slopes, it&#39;s unexpected spike.</span>
+                    <span class="c1"># Replace slope and y_intercept with the previous one.</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">prev_avg_slope</span> <span class="o">-</span> <span class="n">slope</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">SLOPE_THRESHOLD</span><span class="p">:</span>
+                        <span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span> <span class="o">=</span> <span class="n">prev_slope_intercepts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># If no line found, but has previous data, use the previous one.</span>
+            <span class="k">elif</span> <span class="n">prev_slope_intercepts</span><span class="p">:</span>
+                <span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span> <span class="o">=</span> <span class="n">prev_slope_intercepts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Otherwise, skip.    </span>
+            <span class="k">else</span><span class="p">:</span>    
+                <span class="k">continue</span>
+                
+            <span class="c1"># Add the current slope and y_intercept in the prev list.</span>
+            <span class="n">prev_slope_intercepts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">))</span>
+
+            <span class="c1"># Keep previous data up to &quot;MAX_PREV_LENGTH&quot;</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prev_slope_intercepts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_PREV_LENGTH</span><span class="p">:</span>
+                <span class="n">prev_slope_intercepts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">_get_positions</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">,</span> 
+                                        <span class="n">img_height</span><span class="p">,</span> <span class="n">img_interest_height_rate</span><span class="p">)</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>
+                
     
 <span class="k">def</span> <span class="nf">_get_slope_and_y_intercept</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
     <span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
@@ -13486,7 +13519,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -13503,7 +13536,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[29]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -13541,7 +13574,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Build your pipeline that will draw lane lines on the test_images</span>
@@ -13615,7 +13648,7 @@ imageio.plugins.ffmpeg.download()</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import everything needed to edit/save/watch video clips</span>
@@ -13630,7 +13663,7 @@ imageio.plugins.ffmpeg.download()</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">LOW_THRESHOLD</span><span class="p">,</span> <span class="n">HIGH_THRESHOLD</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">150</span>
@@ -13638,14 +13671,17 @@ imageio.plugins.ffmpeg.download()</code></pre>
 <span class="n">RHO</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">THETA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
 <span class="n">THRESHOLD</span> <span class="o">=</span> <span class="mi">35</span>
-<span class="n">MIN_LINE_LEN</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">MAX_LINE_GAP</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">MIN_LINE_LEN</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">MAX_LINE_GAP</span> <span class="o">=</span> <span class="mi">100</span>
 
 
 <span class="k">def</span> <span class="nf">process_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">img_interest_height_rate</span><span class="o">=.</span><span class="mi">58</span><span class="p">,</span> <span class="n">full_extent_line</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># NOTE: The output you return should be a color image (3 channel) for processing video below</span>
     <span class="c1"># TODO: put your pipeline here,</span>
     <span class="c1"># you should return the final output (image where lines are drawn on lanes)</span>
+    
+    <span class="c1"># Initialize parameters</span>
+    <span class="n">init_params</span><span class="p">()</span>
     
     <span class="c1"># Get Edge image</span>
     <span class="n">gray</span> <span class="o">=</span> <span class="n">grayscale</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -13686,7 +13722,7 @@ imageio.plugins.ffmpeg.download()</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">white_output</span> <span class="o">=</span> <span class="s1">&#39;test_videos_output/solidWhiteRight.mp4&#39;</span>
@@ -13726,7 +13762,7 @@ imageio.plugins.ffmpeg.download()</code></pre>
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|█████████▉| 221/222 [00:12&lt;00:00, 15.65it/s]
+<pre>100%|█████████▉| 221/222 [00:12&lt;00:00, 15.18it/s]
 </pre>
 </div>
 </div>
@@ -13740,7 +13776,7 @@ imageio.plugins.ffmpeg.download()</code></pre>
 <pre>[MoviePy] Done.
 [MoviePy] &gt;&gt;&gt;&gt; Video ready: test_videos_output/solidWhiteRight.mp4 
 
-CPU times: user 2.74 s, sys: 229 ms, total: 2.97 s
+CPU times: user 2.73 s, sys: 250 ms, total: 2.98 s
 Wall time: 14.7 s
 </pre>
 </div>
@@ -13760,7 +13796,7 @@ Wall time: 14.7 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -13780,7 +13816,7 @@ Wall time: 14.7 s
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[37]:</div>
+    <div class="prompt output_prompt">Out[51]:</div>
 
 
 
@@ -13817,7 +13853,7 @@ Wall time: 14.7 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">yellow_output</span> <span class="o">=</span> <span class="s1">&#39;test_videos_output/solidYellowLeft.mp4&#39;</span>
@@ -13827,7 +13863,9 @@ Wall time: 14.7 s
 <span class="c1">## You may also uncomment the following line for a subclip of the first 5 seconds</span>
 <span class="c1"># clip2 = VideoFileClip(&#39;test_videos/solidYellowLeft.mp4&#39;).subclip(0,5)</span>
 <span class="n">clip2</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="s1">&#39;test_videos/solidYellowLeft.mp4&#39;</span><span class="p">)</span>
-<span class="n">yellow_clip</span> <span class="o">=</span> <span class="n">clip2</span><span class="o">.</span><span class="n">fl_image</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">process_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">full_extent_line</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">yellow_clip</span> <span class="o">=</span> <span class="n">clip2</span><span class="o">.</span><span class="n">fl_image</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">process_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> 
+                                                         <span class="n">img_interest_height_rate</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+                                                         <span class="n">full_extent_line</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="o">%</span><span class="k">time</span> yellow_clip.write_videofile(yellow_output, audio=False)
 </pre></div>
 
@@ -13857,7 +13895,7 @@ Wall time: 14.7 s
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|█████████▉| 681/682 [00:44&lt;00:00, 15.42it/s]
+<pre>100%|█████████▉| 681/682 [00:43&lt;00:00, 15.63it/s]
 </pre>
 </div>
 </div>
@@ -13871,8 +13909,8 @@ Wall time: 14.7 s
 <pre>[MoviePy] Done.
 [MoviePy] &gt;&gt;&gt;&gt; Video ready: test_videos_output/solidYellowLeft.mp4 
 
-CPU times: user 8.69 s, sys: 687 ms, total: 9.38 s
-Wall time: 45.9 s
+CPU times: user 8.2 s, sys: 724 ms, total: 8.93 s
+Wall time: 45.3 s
 </pre>
 </div>
 </div>
@@ -13883,7 +13921,7 @@ Wall time: 45.9 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -13903,7 +13941,7 @@ Wall time: 45.9 s
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[38]:</div>
+    <div class="prompt output_prompt">Out[69]:</div>
 
 
 
@@ -13939,7 +13977,7 @@ Wall time: 45.9 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">challenge_output</span> <span class="o">=</span> <span class="s1">&#39;test_videos_output/challenge.mp4&#39;</span>
@@ -13981,7 +14019,7 @@ Wall time: 45.9 s
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 251/251 [00:32&lt;00:00,  7.25it/s]
+<pre>100%|██████████| 251/251 [00:31&lt;00:00,  7.93it/s]
 </pre>
 </div>
 </div>
@@ -13995,8 +14033,8 @@ Wall time: 45.9 s
 <pre>[MoviePy] Done.
 [MoviePy] &gt;&gt;&gt;&gt; Video ready: test_videos_output/challenge.mp4 
 
-CPU times: user 6.29 s, sys: 337 ms, total: 6.63 s
-Wall time: 36.3 s
+CPU times: user 5.77 s, sys: 1.12 s, total: 6.89 s
+Wall time: 34.9 s
 </pre>
 </div>
 </div>
@@ -14007,7 +14045,7 @@ Wall time: 36.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -14027,7 +14065,7 @@ Wall time: 36.3 s
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[43]:</div>
+    <div class="prompt output_prompt">Out[72]:</div>
 
 
 
